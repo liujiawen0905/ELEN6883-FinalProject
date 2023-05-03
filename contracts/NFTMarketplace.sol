@@ -71,6 +71,10 @@ contract NFTMarketplace {
         myNFT = NFT(_NFTAddress);
     }
 
+    function getTokenPrice() public view returns(uint) {
+        return tokenPrice;
+    }
+
     // Create NFT
     function createNFT(uint id, string memory name, string memory description) public payable returns (uint){
         // increment the tokenId counter, which is keep track of the number of mined NFTs
