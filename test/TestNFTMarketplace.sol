@@ -33,6 +33,34 @@ contract TestNFTMarketplace {
     assert.equal(token_owner, owner, "Incorrect NFT owner");
   }
 
+  function testTransferNFT() public {
+
+    // Initialize NFT market
+    NFTMarketplace market = new NFTMarketplace(0x81471980D76Fe40b43835A887Fb43791484f42b8);
+
+  }
+
+  function testListNFTForSale() public {
+
+    // Initialize NFT market
+    NFTMarketplace market = new NFTMarketplace(0x81471980D76Fe40b43835A887Fb43791484f42b8);
+
+  }
+  
+  function testRemoveNFTFromSale() public {
+
+    // Initialize NFT market
+    NFTMarketplace market = new NFTMarketplace(0x81471980D76Fe40b43835A887Fb43791484f42b8);
+
+  }
+
+  function testPurchaseNFT() public {
+
+    // Initialize NFT market
+    NFTMarketplace market = new NFTMarketplace(0x81471980D76Fe40b43835A887Fb43791484f42b8);
+
+  }
+
   function testInitialBalanceWithNewMetaCoin() public {
     NFTMarketplace market = new NFTMarketplace(0x81471980D76Fe40b43835A887Fb43791484f42b8);
 
