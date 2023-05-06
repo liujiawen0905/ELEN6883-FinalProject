@@ -12,21 +12,25 @@ contract TestNFTMarketplace {
 
     // Initialize NFT market
     NFTMarketplace market = new NFTMarketplace(0x81471980D76Fe40b43835A887Fb43791484f42b8);
+    address owner = market.owner;
 
     // Create NFT
-    uint NFT_id = 1;
-    string NFT_name = "Name";
-    string NFT_desc = "Desc";
-    market.createNFT(NFT_id, NFT_name, NFT_desc);
+    uint NFT_id = 100;
+    string memory NFT_name = "Name";
+    string memory NFT_desc = "Desc";
+    uint newTokenCount = market.createNFT(NFT_id, NFT_name, NFT_desc);
 
-    // Get NFT
-    Token storage NFT = market.idToToken[NFT_id];
+    // Get NFT TODO: Create get token info functions
+    token_id = market.getTokenId();
+    token_name = market.getTokenName();
+    token_desc = market.getTokenDesc();
+    token_owner = market.getTokenOwner();
 
     // Assertion
-    assert.equal(Token.unique_id, NFT_id, "Incorrect NFT ID");
-    assert.equal(Token.name, NFT_name, "Incorrect NFT name");
-    assert.equal(Token.description, NFT_desc, "Incorrect NFT description");
-    assert.equal(Token.owner, accounts[0], "Incorrect NFT owner");
+    assert.equal(token_id, NFT_id, "Incorrect NFT ID");
+    assert.equal(token_name, NFT_name, "Incorrect NFT name");
+    assert.equal(token_desc, NFT_desc, "Incorrect NFT description");
+    assert.equal(token_owner, owner, "Incorrect NFT owner");
   }
 
   function testInitialBalanceWithNewMetaCoin() public {
