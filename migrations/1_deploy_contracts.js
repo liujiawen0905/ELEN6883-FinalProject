@@ -1,9 +1,8 @@
-const NFT = artifacts.require("NFT");
-const NFTMarketplace = artifacts.require("NFTMarketplace");
-
+var Migrations = artifacts.require("./Migrations.sol");
+var NFTMarketplace = artifacts.require("./NFTMarketplace.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(NFT);
-  deployer.link(NFT, NFTMarketplace);
-  deployer.deploy(NFTMarketplace, "0x81471980D76Fe40b43835A887Fb43791484f42b8");
+  deployer.deploy(Migrations);
+  deployer.link(Migrations, NFTMarketplace);
+  deployer.deploy(NFTMarketplace,"Columbia NFT Marketplace", "NFTM", 0.1);
 };
