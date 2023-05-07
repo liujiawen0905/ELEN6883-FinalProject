@@ -64,7 +64,7 @@ contract NFTMarketplace is ERC721, Ownable{
     function createNFT(uint id, string memory name, string memory description, address user_address) public payable returns (uint){
         _marketTokenCounts.increment();
         uint newTokenId = _marketTokenCounts.current();
-        // _safeMint(user_address, id);
+        _safeMint(user_address, id);
         idToToken[id] = NFT(
             id,
             user_address,
@@ -77,7 +77,7 @@ contract NFTMarketplace is ERC721, Ownable{
     }
 
     // transfer NFT function
-    function transferNFT(uint id, address toAddress) public payable{
+    function transferNFT(uint id, address fromAddress, address toAddress) public payable{
         NFT storage item = idToToken[id];
         require(item.id == id, "The NFT must exist");
         require(ownerOf(id) == msg.sender, "Current user do not own this NFT");
@@ -85,7 +85,7 @@ contract NFTMarketplace is ERC721, Ownable{
         idToToken[id].is_listed = false;
         idToToken[id].owner = toAddress;
         //Actually transfer the token to the new owner
-        safeTransferFrom(address(this), toAddress, id);
+        safeTransferFrom(fromAddress, toAddress, id);
     }
 
     // list NFT for sale
