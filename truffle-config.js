@@ -18,7 +18,8 @@
  *
  */
 
-// require('dotenv').config();
+require('dotenv').config();
+const HDWalletProvider = require('truffle-hdwallet-provider');
 // const mnemonic = process.env["MNEMONIC"];
 // const infuraProjectId = process.env["INFURA_PROJECT_ID"];
  
@@ -42,11 +43,19 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    // development: {
-    //  host: "127.0.0.1",     // Localhost (default: none)
-    //  port: 8545,            // Standard Ethereum port (default: none)
-    //  network_id: "*",       // Any network (default: none)
-    // },
+    development: {
+     host: "127.0.0.1",     // Localhost (default: none)
+     port: 7545,            // Standard Ethereum port (default: none)
+     network_id: "*",       // Any network (default: none)
+    },
+    // kovan: {
+    //   provider: function() {
+    //     return new HDWalletProvider(
+    //       process.env.MNEMONIC,
+    //       `https://sepolia.infura.io/v3/8b2010cc0eba4d759f45b70745cf13c1`
+    //     )
+    //   },
+    // }
     //
     // goerli: {
     //   provider: () => new HDWalletProvider(mnemonic, `https://goerli.infura.io/v3/${infuraProjectId}`),
