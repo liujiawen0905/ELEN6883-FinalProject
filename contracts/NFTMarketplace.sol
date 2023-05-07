@@ -3,8 +3,9 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract NFTMarketplace is ERC721 {
+contract NFTMarketplace is ERC721, Ownable{
     using Counters for Counters.Counter;
     Counters.Counter private _marketTokenCounts;
 
@@ -21,8 +22,6 @@ contract NFTMarketplace is ERC721 {
     address payable private marketOwner;
     uint private royalty_percentage;
 
-    uint256 tokenPrice = 0.1 ether;
-
     //mapping from token id to token information
     mapping(uint => NFT) public idToToken;
 
@@ -34,8 +33,9 @@ contract NFTMarketplace is ERC721 {
         marketOwner = payable(msg.sender);
     }
 
-    function getTokenPrice() public view returns(uint) {
-        return tokenPrice;
+    // Get NFT
+    function getNFT(uint id) public view returns (NFT memory) {
+        return idToToken[id];
     }
 
     // mint a new NFT and returns the id
@@ -59,6 +59,7 @@ contract NFTMarketplace is ERC721 {
     function createNFT(uint id, string memory name, string memory description) public payable returns (uint){
         _marketTokenCounts.increment();
         uint newTokenId = _marketTokenCounts.current();
+        _safeMint(msg.sender, id);
         idToToken[id] = NFT(
             id,
             payable(msg.sender),
