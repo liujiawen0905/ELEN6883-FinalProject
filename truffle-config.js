@@ -25,6 +25,8 @@ const HDWalletProvider = require('truffle-hdwallet-provider');
  
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 
+const MNEMONIC = "bicycle spend price select today absent blame hamster salmon cry crawl drop"
+
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
@@ -48,14 +50,14 @@ module.exports = {
      port: 7545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
     },
-    // kovan: {
-    //   provider: function() {
-    //     return new HDWalletProvider(
-    //       process.env.MNEMONIC,
-    //       `https://sepolia.infura.io/v3/8b2010cc0eba4d759f45b70745cf13c1`
-    //     )
-    //   },
-    // }
+    sepolia: {
+      provider: function() {
+        return new HDWalletProvider(MNEMONIC, `https://sepolia.infura.io/v3/3451202424054bccadd02092a1b54b93`)
+      },
+      network_id: 11155111,
+      gasPrice: 0,
+      skiDryRun: true,
+    }
     //
     // goerli: {
     //   provider: () => new HDWalletProvider(mnemonic, `https://goerli.infura.io/v3/${infuraProjectId}`),
