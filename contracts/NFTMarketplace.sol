@@ -38,6 +38,11 @@ contract NFTMarketplace is ERC721, Ownable{
         return idToToken[id];
     }
 
+    // Get commision percentage
+    function commissionPercentage() public view returns (uint) {
+        return royalty_percentage;
+    }
+
     // mint a new NFT and returns the id
     function mintNFT() public returns (uint) {
         // increment the tokenId counter, which is keep track of the number of mined NFTs
@@ -56,13 +61,13 @@ contract NFTMarketplace is ERC721, Ownable{
     }
 
     // Create NFT
-    function createNFT(uint id, string memory name, string memory description) public payable returns (uint){
+    function createNFT(uint id, string memory name, string memory description, address user_address) public payable returns (uint){
         _marketTokenCounts.increment();
         uint newTokenId = _marketTokenCounts.current();
-        _safeMint(msg.sender, id);
+        // _safeMint(user_address, id);
         idToToken[id] = NFT(
             id,
-            payable(msg.sender),
+            user_address,
             name,
             0,
             description,
@@ -84,21 +89,21 @@ contract NFTMarketplace is ERC721, Ownable{
     }
 
     // list NFT for sale
-    function listNFTForSale(uint id, uint price) public {
+    function listNFTForSale(uint id, uint price, address user_address) public {
         NFT storage item = idToToken[id];
         require(item.id == id, "The NFT must exist");
         require(price > 0, "The price must be positive");
-        require(item.owner == msg.sender, "Only the onwer can list a NFT for sale");
+        require(item.owner == user_address, "Only the onwer can list a NFT for sale");
         require(!item.is_listed, "The NFT is already listed");
         item.is_listed = true;
         item.price = price;
     }
 
     // remove NFT From sale
-    function removeNFTFromSale(uint id) public {
+    function removeNFTFromSale(uint id, address user_address) public {
         NFT storage item = idToToken[id];
         require(item.id == id, "The NFT must exist");
-        require(item.owner == msg.sender, "The NFT can only be removed by owner");
+        require(item.owner == user_address, "The NFT can only be removed by owner");
         require(item.is_listed, "The NFT has not been listed yet");
         item.is_listed = false;
     }

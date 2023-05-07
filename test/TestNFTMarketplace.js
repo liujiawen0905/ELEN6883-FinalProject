@@ -18,7 +18,7 @@ contract('NFTMarketplace', (accounts) => {
     const nft1_description = 'DESC1';
 
     // Create NFT
-    await nftMarketplace.createNFT(nft1_id, nft1_name, nft1_description);
+    await nftMarketplace.createNFT(nft1_id, nft1_name, nft1_description, user1);
 
     // Get NFT info
     // const nft1 = await nftMarketplace.getNFT(nft1_id);
@@ -43,10 +43,10 @@ contract('NFTMarketplace', (accounts) => {
     const nft2_description = 'DESC2';
 
     // Create NFT
-    await nftMarketplace.createNFT(nft2_id, nft2_name, nft2_description);
+    await nftMarketplace.createNFT(nft2_id, nft2_name, nft2_description, user2);
 
     // Transfer the NFT from user1 to user2
-    await nftMarketplace.transferNFT(nft2_id, user3);
+    await nftMarketplace.transferNFT(nft2_id, user3, { from: user2 });
 
     // Assertions
     const nft2_owner = await nftMarketplace.ownerOf(nft2_id);
@@ -65,10 +65,10 @@ contract('NFTMarketplace', (accounts) => {
     const nft3_price = 1;
 
     // Create NFT
-    await nftMarketplace.createNFT(nft3_id, nft3_name, nft3_description);
+    await nftMarketplace.createNFT(nft3_id, nft3_name, nft3_description, user3);
     
     // List the NFT for sale
-    await nftMarketplace.listNFTForSale(nft3_id, nft3_price);
+    await nftMarketplace.listNFTForSale(nft3_id, nft3_price, user3);
 
     // Assertions
     const nft3 = await nftMarketplace.getNFT(nft3_id);
@@ -88,13 +88,13 @@ contract('NFTMarketplace', (accounts) => {
     const nft4_price = 1;
 
     // Create NFT
-    await nftMarketplace.createNFT(nft4_id, nft4_name, nft4_description);
+    await nftMarketplace.createNFT(nft4_id, nft4_name, nft4_description, user4);
 
     // List the NFT for sale
-    await nftMarketplace.listNFTForSale(nft4_id, nft4_price);
+    await nftMarketplace.listNFTForSale(nft4_id, nft4_price, user4);
 
     // Remove the NFT from sale
-    await nftMarketplace.removeNFTFromSale(nft4_id);
+    await nftMarketplace.removeNFTFromSale(nft4_id, user4);
 
     // Assertions
     const nft4 = await nftMarketplace.getNFT(nft4_id);
@@ -114,10 +114,10 @@ contract('NFTMarketplace', (accounts) => {
     const nft5_price = 1;
 
     // Create NFT
-    await nftMarketplace.createNFT(nft5_id, nft5_name, nft5_description);
+    await nftMarketplace.createNFT(nft5_id, nft5_name, nft5_description, user5);
 
     // List the NFT for sale
-    await nftMarketplace.listNFTForSale(nft5_id, nft5_price);
+    await nftMarketplace.listNFTForSale(nft5_id, nft5_price, user5);
   
     // Get original balances
     const sellerOriginBalance = await web3.eth.getBalance(user5);
@@ -126,7 +126,7 @@ contract('NFTMarketplace', (accounts) => {
     const commissionPercentage = await nftMarketplace.commissionPercentage();
 
     // Get NFT price
-    const nftPrice = await nftMarketplace.nfts(tokenId);
+    const nftPrice = await nftMarketplace.nfts(nft5_id);
     const price = nftPrice.price;
 
     // Calculate commision
@@ -138,18 +138,18 @@ contract('NFTMarketplace', (accounts) => {
     const totalCost = salePriceBN.add(commissionBN);
 
     // Check buyer's balance
-    const buyerBalance = await web3.eth.getBalance(buyer);
+    const buyerBalance = await web3.eth.getBalance(user6);
     assert(web3.utils.toBN(buyerBalance).gte(totalCost), "Buyer's balance not enough");
 
     // purchase NFT
-    const tx = await nftMarketplace.purchaseNFT(tokenId);
+    const tx = await nftMarketplace.purchaseNFT(tokenId, { from: user6, value: totalCost.toString() });
 
     // Check NFT owner
     const new_owner = await nftMarketplace.ownerOf(tokenId);
-    assert.equal(new_owner, buyer, "ownership not transferred to buyer");
+    assert.equal(new_owner, user6, "ownership not transferred to buyer");
 
     // Check seller's balance
-    const seller_balance_after = await web3.eth.getBalance(seller);
+    const seller_balance_after = await web3.eth.getBalance(user5);
 
     // Check seller's balance after purchasement
     const fee = commissionBN;
