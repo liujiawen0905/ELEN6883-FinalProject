@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+
 contract NFTMarketplace is ERC721, Ownable{
     using Counters for Counters.Counter;
     Counters.Counter private _marketTokenCounts;
@@ -28,7 +29,7 @@ contract NFTMarketplace is ERC721, Ownable{
     //mapping from a user address to user's fund
     mapping(address => uint) public userFunds;
 
-    constructor(string memory name, string memory symbol, uint percentage) ERC721(name, symbol){
+    constructor(string memory name, string memory symbol, uint percentage) ERC721(name, symbol) {
         commision_percentage = percentage;
         marketOwner = payable(msg.sender);
     }
@@ -61,9 +62,8 @@ contract NFTMarketplace is ERC721, Ownable{
     }
 
     // Create NFT
-    function createNFT(uint id, string memory name, string memory description) public payable returns (uint){
+    function createNFT(uint id, string memory name, string memory description) public payable {
         _marketTokenCounts.increment();
-        uint newTokenId = _marketTokenCounts.current();
         _safeMint(msg.sender, id);
         idToToken[id] = NFT(
             id,
@@ -73,7 +73,6 @@ contract NFTMarketplace is ERC721, Ownable{
             description,
             false
         );
-        return newTokenId;
     }
 
     // transfer NFT function
@@ -86,7 +85,7 @@ contract NFTMarketplace is ERC721, Ownable{
         idToToken[id].owner = toAddress;
         //Actually transfer the token to the new owner
         // setApprovalForAll(fromAddress, true);
-        safeTransferFrom(msg.sender, toAddress, id);
+        _transfer(msg.sender, toAddress, id);
     }
 
     // list NFT for sale
@@ -114,7 +113,6 @@ contract NFTMarketplace is ERC721, Ownable{
         require(item.is_listed, "The NFT needs to be listed to be purchased");
         require(item.id == id, "The NFT must exist");
         require(item.owner != msg.sender, "A NFT can not be purchased by it's owner");
-        require(msg.value >= item.price, "The buyer does not have enough money");
 
         // Transfer money to the seller and the market owner
         address payable seller = payable(item.owner);
@@ -122,6 +120,7 @@ contract NFTMarketplace is ERC721, Ownable{
         uint256 commision_fee = sale_amount * (commision_percentage) / 100;
         seller.transfer(sale_amount - commision_fee);
         marketOwner.transfer(commision_fee);
+        require(msg.value == item.price + commision_fee, "Incorrect price");
 
         // Transfer the NFT to the new owner and remove it from the market
         _transfer(seller, msg.sender, id);
