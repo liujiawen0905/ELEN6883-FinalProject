@@ -10,25 +10,33 @@ In conclusion, the project successfully developed an NFT marketplace smart contr
 ## Installing
 First, install the dependencies with: npm install.
 Run the following command in your terminal after cloning the main repo:
+```
 $ npm install
+```
 Then, install Truffle globally by running the following command in your terminal:
+```
 $ npm install -g truffle
-
+```
 ## Running the Tests
 First, compile the smart contracts by running the following command in your terminal:
 $ truffle compile
+
 Then install and run Ganache to run your blockchain locally:
-https://www.trufflesuite.com/ganache
+[Ganache Installation](https://www.trufflesuite.com/ganache)
+
 Test that validate your solution can be executed by running the following command:
+```
 $ truffle test
+```
 
 ## Deployment on Local Blockchain
 Deploy the contracts on your Ganache local blockchain by running the following command:
+```
 $ truffle migrate
-
+```
 ## Team member contributions
 
-Jiawen Liu: Development environment setup, smart contract design, and testing.
-Yuyang Wang, Shutong Zhang: Implementation of minting, ownership, and metadata functions.
-Nina Hsu: Smart contract deployment and test case development.
+Jiawen Liu: Development environment setup, smart contract design, and testing.\
+Yuyang Wang, Shutong Zhang: Implementation of minting, ownership, and metadata functions.\
+Nina Hsu: Smart contract deployment and test case development.\
 Yue Rao: Project management, documentation, and quality assurance.
